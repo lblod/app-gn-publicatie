@@ -15,7 +15,7 @@ services:
     labels:
       - "logging=true"
   dispatcher:
-    image: semtech/mu-dispatcher:1.1.2
+    image: semtech/mu-dispatcher:2.0.0
     volumes:
       - ./config/dispatcher:/config
     restart: always
@@ -107,14 +107,6 @@ services:
     volumes:
       - ./config/delta:/config
     restart: always
-  dispatcher:
-    image: semtech/mu-dispatcher:1.1.2
-    volumes:
-      - ./config/dispatcher:/config
-    restart: always
-    logging: *default-logging
-    labels:
-      - "logging=true"
   published-resource-consumer:
     image: lblod/gelinkt-notuleren-consumer:0.1.6
     environment:

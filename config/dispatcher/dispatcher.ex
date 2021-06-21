@@ -1,116 +1,123 @@
 defmodule Dispatcher do
-  use Plug.Router
+  use Matcher
+  define_accept_types [
+    html: [ "text/html", "application/xhtml+html" ],
+    any: [ "*/*" ]
+  ]
 
-  def start(_argv) do
-    port = 80
-    IO.puts "Starting Plug with Cowboy on port #{port}"
-    Plug.Adapters.Cowboy.http __MODULE__, [], port: port
-    :timer.sleep(:infinity)
-  end
+  @html %{ accept: %{ html: true } }
+  @any %{ accept: %{ any: true } }
 
-  plug Plug.Logger
-  plug :match
-  plug :dispatch
-
-  # In order to forward the 'themes' resource to the
-  # resource service, use the following forward rule.
-  #
-  # docker-compose stop; docker-compose rm; docker-compose up
-  # after altering this file.
-  #
-  # match "/themes/*path" do
-  #   Proxy.forward conn, path, "http://resource/themes/"
-  # end
-
-  match "/published-resource-consumer/*path" do
+  match "/published-resource-consumer/*path", @any do
     Proxy.forward conn, path, "http://published-resource-consumer/"
   end
-  match "/agendas/*path" do
+  match "/agendas/*path", @any do
     Proxy.forward conn, path, "http://resource/agendas/"
   end
 
-  match "/besluitenlijsten/*path" do
+  match "/besluitenlijsten/*path", @any do
     Proxy.forward conn, path, "http://resource/besluitenlijsten/"
   end
 
-  match "/uittreksels/*path" do
+  match "/uittreksels/*path", @any do
     Proxy.forward conn, path, "http://resource/uittreksels/"
   end
 
-  match "/agendapunten/*path" do
+  match "/agendapunten/*path", @any do
     Proxy.forward conn, path, "http://resource/agendapunten/"
   end
 
-  match "/behandelingen-van-agendapunten/*path" do
+  match "/behandelingen-van-agendapunten/*path", @any do
     Proxy.forward conn, path, "http://resource/behandelingen-van-agendapunten/"
   end
 
-  match "/stemmingen/*path" do
+  match "/stemmingen/*path", @any do
     Proxy.forward conn, path, "http://resource/stemmingen/"
   end
 
-  match "/besluiten/*path" do
+  match "/besluiten/*path", @any do
     Proxy.forward conn, path, "http://resource/besluiten/"
   end
 
-  match "/bestuurseenheden/*path" do
+  match "/bestuurseenheden/*path", @any do
     Proxy.forward conn, path, "http://cache/bestuurseenheden/"
   end
 
-  match "/werkingsgebieden/*path" do
+  match "/werkingsgebieden/*path", @any do
     Proxy.forward conn, path, "http://cache/werkingsgebieden/"
   end
 
-  match "/bestuurseenheid-classificatie-codes/*path" do
-    Proxy.forward conn, path, "http://cache/bestuurseenheid-classificatie-codes/"
+  match "/bestuurseenheid-classificatie-codes/*path", @any do
+    IO.inspect(conn, label: "conn to cache")
+    Proxy.forward conn, path, "http://resource/bestuurseenheid-classificatie-codes/"
   end
 
-  match "/bestuursorganen/*path" do
+  match "/bestuursorganen/*path", @any do
     Proxy.forward conn, path, "http://cache/bestuursorganen/"
   end
 
-  match "/bestuursorgaan-classificatie-codes/*path" do
+  match "/bestuursorgaan-classificatie-codes/*path", @any do
     Proxy.forward conn, path, "http://cache/bestuursorgaan-classificatie-codes/"
   end
 
-  match "/zittingen/*path" do
+  match "/zittingen/*path", @any do
     Proxy.forward conn, path, "http://resource/zittingen/"
   end
 
-  match "/notulen/*path" do
+  match "/notulen/*path", @any do
     Proxy.forward conn, path, "http://resource/notulen/"
   end
 
 
-  match "/signed-resources/*path" do
+  match "/signed-resources/*path", @any do
     Proxy.forward conn, path, "http://resource/signed-resources/"
   end
 
-  match "/published-resources/*path" do
+  match "/published-resources/*path", @any do
     Proxy.forward conn, path, "http://resource/published-resources/"
   end
 
-  match "/versioned-agendas/*path" do
+  match "/versioned-agendas/*path", @any do
     Proxy.forward conn, path, "http://resource/versioned-agendas/"
   end
 
-  match "/versioned-besluiten-lijsten/*path" do
+  match "/versioned-besluiten-lijsten/*path", @any do
     Proxy.forward conn, path, "http://resource/versioned-besluiten-lijsten/"
   end
 
-  match "/versioned-behandelingen/*path" do
+  match "/versioned-behandelingen/*path", @any do
     Proxy.forward conn, path, "http://resource/versioned-behandelingen/"
   end
 
-  match "/versioned-notulen/*path" do
+  match "/versioned-notulen/*path", @any do
     Proxy.forward conn, path, "http://resource/versioned-notulen/"
   end
 
-  match "/concepts/*path" do
+  match "/concepts/*path", @any do
     Proxy.forward conn, path, "http://cache/concepts/"
   end
 
-  match "/concept-schemes/*path" do
+  match "/concept-schemes/*path", @any do
     Proxy.forward conn, path, "http://cache/concept-schemes/"
+  end
+
+  match "/@appuniversum/*path", @any do
+    Proxy.forward conn, path, "http://publicatie/@appuniversum/"
+  end
+
+  match "/assets/*path", @any do
+    IO.puts "forwarding assets"
+    Proxy.forward conn, path, "http://publicatie/assets/"
+  end
+
+  match "/*_path", @html do
+    IO.inspect(_path, label: "reqesting html for path")
+    # *_path allows a path to be supplied, but will not yield
+    # an error that we don't use the path variable.
+    Proxy.forward conn, [], "http://publicatie/index.html"
+  end
+
+  match "/*_", %{ last_call: true, accept: %{ json: true } } do
+    send_resp( conn, 404, "{ \"error\": { \"code\": 404, \"message\": \"Route not found.  See config/dispatcher.ex\" } }" )
   end
 end
