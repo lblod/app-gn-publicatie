@@ -7,10 +7,10 @@ x-logging: &default-logging
     max-file: "3"
 services:
   publicatie:
-    ports:
-      - 8080:80
     restart: "no"
   identifier:
+    ports:
+      - "8080:80"
     restart: "no"
   database:
     restart: "no"
