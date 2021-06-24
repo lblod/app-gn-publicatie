@@ -111,7 +111,6 @@ defmodule Dispatcher do
   end
 
   match "/*_path", @html do
-    IO.inspect(_path, label: "reqesting html for path")
     # *_path allows a path to be supplied, but will not yield
     # an error that we don't use the path variable.
     Proxy.forward conn, [], "http://publicatie/index.html"
