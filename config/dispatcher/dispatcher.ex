@@ -110,6 +110,14 @@ defmodule Dispatcher do
     Proxy.forward conn, path, "http://publicatie/assets/"
   end
 
+  get "/files/:id/download" do
+    Proxy.forward conn, [], "http://file/files/" <> id <> "/download"
+  end
+  
+  post "/files/*path" do
+    Proxy.forward conn, path, "http://file/files/"
+  end
+
   match "/favicon.ico", @any do
     send_resp( conn, 404, "" )
   end

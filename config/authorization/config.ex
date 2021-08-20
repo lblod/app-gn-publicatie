@@ -61,6 +61,7 @@ defmodule Acl.UserGroups.Config do
                         "http://mu.semte.ch/vocabularies/ext/signing/PublishedResource",
                         "http://www.w3.org/2004/02/skos/core#Concept",
                         "http://www.w3.org/2004/02/skos/core#ConceptScheme",
+                        "http://www.semanticdesktop.org/ontologies/2007/03/22/nfo#FileDataObject",
                       ]
                     } },
                   %GraphSpec{

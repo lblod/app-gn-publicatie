@@ -123,3 +123,9 @@ services:
     image: lblod/task-metrics-service:1.0.0
     links:
       - database:database
+  file:
+    image: semtech/mu-file-service:3.1.0
+    links:
+      - database:database
+    volumes:
+      - ../app-gelinkt-notuleren/data/files/:/share/
