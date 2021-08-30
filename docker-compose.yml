@@ -127,5 +127,3 @@ services:
     image: semtech/mu-file-service:3.1.0
     links:
       - database:database
-    volumes:
-      - ../app-gelinkt-notuleren/data/files/:/share/

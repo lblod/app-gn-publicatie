@@ -33,6 +33,9 @@ services:
     command: "/bin/false" # overwrite when testing
   taskmetrics:
     restart: "no"
+  file:
+    volumes:
+        - ../app-gelinkt-notuleren/data/files/:/share/
   # # enable the following for linking the consumer to a local stack
   # # assumes the app-gn stack is running locally on your host
   # # and you've renamed the identifier to identifier-gelinkt-notuleren
