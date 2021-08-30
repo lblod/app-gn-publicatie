@@ -34,6 +34,7 @@ services:
   taskmetrics:
     restart: "no"
   file:
+    restart: "no"
     volumes:
         - ../app-gelinkt-notuleren/data/files/:/share/
   # # enable the following for linking the consumer to a local stack
