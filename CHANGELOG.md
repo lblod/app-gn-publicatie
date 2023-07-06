@@ -1,3 +1,7 @@
+## 1.6.3 (2023-07-06)
+apply hotfix v0.24.8 to frontend
+
+
 ## 1.6.2 (2022-12-07)
 
 #### :house: Internal
