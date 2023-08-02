@@ -4,6 +4,15 @@
 
 
 
+
+## 1.8.6 (2023-08-02)
+
+#### :house: Internal
+* [#31](https://github.com/lblod/app-gn-publicatie/pull/31) GN-4446: update frontend to 1.0.6 ([@elpoelma](https://github.com/elpoelma))
+
+#### Committers: 1
+- Elena Poelman ([@elpoelma](https://github.com/elpoelma))
+
 ## 1.8.5 (2023-07-18)
 
 #### :house: Internal
