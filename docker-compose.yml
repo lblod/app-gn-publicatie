@@ -43,7 +43,7 @@ services:
     labels:
       - "logging=true"
   virtuoso:
-    image: tenforce/virtuoso
+    image: redpencil/virtuoso:1.2.0-rc.1
     environment:
       SPARQL_UPDATE: "true"
       DEFAULT_GRAPH: "http://mu.semte.ch/application"
@@ -139,3 +139,8 @@ services:
     environment:
       SPARQL_ENDPOINT: "http://virtuoso:8890/sparql"
       PORT: 80
+  project-scripts:
+    image: semtech/simple-script-store:1.0.0
+    volumes:
+      - ./scripts/:/app/scripts/
+    restart: "no"
