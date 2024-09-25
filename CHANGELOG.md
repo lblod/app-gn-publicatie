@@ -1,5 +1,11 @@
 # app-gn-publicatie
 
+## 1.13.2
+
+### Patch Changes
+
+- [`0f85440`](https://github.com/lblod/app-gn-publicatie/commit/0f8544052acb4fa6d67b3519b1bc959cdb0651fb) Thanks [@abeforgit](https://github.com/abeforgit)! - add maintenance script
+
 ## 1.13.1
 
 ### Patch Changes
