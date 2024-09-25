@@ -1,0 +1,21 @@
+{
+  "version": "0.1",
+  "scripts": [
+    {
+      "documentation": {
+        "command": "unpublish",
+        "description": "unpublish stuff",
+        "arguments": []
+      },
+      "environment": {
+        "image": "ruby",
+        "interactive": true,
+        "script": "unpublish/run.rb",
+        "join_networks": true
+      },
+      "mounts": {
+        "app": "/project/"
+      }
+    }
+  ]
+}

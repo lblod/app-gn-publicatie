@@ -142,3 +142,8 @@ services:
     environment:
       SPARQL_ENDPOINT: "http://virtuoso:8890/sparql"
       PORT: 80
+  project-scripts:
+    image: semtech/simple-script-store:1.0.0
+    volumes:
+      - ./scripts/:/app/scripts/
+    restart: "no"
