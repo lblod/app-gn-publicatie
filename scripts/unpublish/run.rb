@@ -63,18 +63,18 @@ EOF
   Mu::AuthSudo.query(query).map { |b| b[:meeting] }
 end
 
-def move_meeting_to_quarantine(meeting, quarantine_graph)
+def move_resource_to_quarantine(resource, quarantine_graph)
   query = <<~EOF
   DELETE {
     GRAPH <http://mu.semte.ch/graphs/public> {
-      #{sparql_escape_uri(meeting)} ?p ?o
+      #{sparql_escape_uri(resource)} ?p ?o
   }}
   INSERT {
    GRAPH #{sparql_escape_uri(quarantine_graph)} {
-      #{sparql_escape_uri(meeting)} ?p ?o
+      #{sparql_escape_uri(resource)} ?p ?o
 }
 } WHERE { GRAPH <http://mu.semte.ch/graphs/public> {
-      #{sparql_escape_uri(meeting)} ?p ?o
+      #{sparql_escape_uri(resource)} ?p ?o
 }};
 EOF
   Mu::AuthSudo.update(query)
@@ -107,13 +107,30 @@ def ensure_quarantine_graph(prompt, org_uri)
   graph
 end
 
+def get_published_uittreksels_for_org(org_uri)
+  query = <<~EOF
+SELECT distinct ?resource WHERE {
+  GRAPH ?h {
+   ?meeting a <http://data.vlaanderen.be/ns/besluit#Zitting>.
+  ?meeting <http://mu.semte.ch/vocabularies/ext/uittreksel> ?resource.
+           ?meeting <http://data.vlaanderen.be/ns/besluit#isGehoudenDoor> ?bestuursorgaan.
+  }
+  GRAPH <http://mu.semte.ch/graphs/public> {
+  ?resource a <http://mu.semte.ch/vocabularies/ext/Uittreksel>.
+?bestuursorgaan <http://data.vlaanderen.be/ns/mandaat#isTijdspecialisatieVan>/<http://data.vlaanderen.be/ns/besluit#bestuurt> #{sparql_escape_uri(org_uri)}.
+  }
+}
+EOF
+  Mu::AuthSudo.query(query).map { |b| b[:resource] }
+end
+
 def quarantine_org(prompt, org_uri)
   prompt.say("This option will move all meeting data related to #{org_uri} to a separate graph and add some metadata to the main graph")
   graph = ensure_quarantine_graph(prompt, org_uri)
   meetings = get_meeting_uris_for_org(org_uri)
   prompt.say("Found #{meetings.size} meetings to quarantine")
   meetings.each do |meeting|
-    move_meeting_to_quarantine(meeting, graph)
+    move_resource_to_quarantine(meeting, graph)
   end
   prompt.say("All meetings moved to quarantine")
   files = get_file_uris_for_org(org_uri)
@@ -122,24 +139,32 @@ def quarantine_org(prompt, org_uri)
     move_file_to_quarantine(file, graph)
   end
   prompt.say("All files moved to quarantine")
+  publications = get_published_uittreksels_for_org(org_uri)
+  prompt.say("Found #{publications.size} published uittreksels to quarantine")
+  publications.each do |publication|
+    move_resource_to_quarantine(publication, graph)
+  end
+  prompt.say("All uittreksels moved to quarantine")
 end
 
 def get_file_uris_for_org(org_uri)
   query = <<~EOF
 SELECT distinct ?file WHERE {
+  GRAPH ?h {
+   ?meeting a <http://data.vlaanderen.be/ns/besluit#Zitting>.
+   ?meeting prov:wasDerivedFrom ?resource.
+   ?meeting <http://data.vlaanderen.be/ns/besluit#isGehoudenDoor> ?bestuursorgaan.
+  }
+
   GRAPH <http://mu.semte.ch/graphs/public> {
    ?resource <http://mu.semte.ch/vocabularies/ext/hasAttachments> ?attachment.
+?bestuursorgaan <http://data.vlaanderen.be/ns/mandaat#isTijdspecialisatieVan>/<http://data.vlaanderen.be/ns/besluit#bestuurt> ?org.
   }
   GRAPH ?g {
     ?attachment <http://mu.semte.ch/vocabularies/ext/hasFile> ?file.
   }
   GRAPH <http://mu.semte.ch/graphs/public> {
     ?file a ?type.
-  }
-  GRAPH ?h {
-   ?meeting a <http://data.vlaanderen.be/ns/besluit#Zitting>.
-   ?meeting prov:wasDerivedFrom ?resource.
-   ?meeting <http://data.vlaanderen.be/ns/besluit#isGehoudenDoor>/<http://data.vlaanderen.be/ns/mandaat#isTijdspecialisatieVan>/<http://data.vlaanderen.be/ns/besluit#bestuurt> ?org.
   }
 }
 EOF
