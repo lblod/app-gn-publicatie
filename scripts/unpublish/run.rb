@@ -4,16 +4,9 @@ require 'bundler/inline'
 require 'yaml'
 require 'securerandom'
 require 'date'
+require 'tty-prompt'
 
 $stdout.sync = true
-print "installing dependencies..."
-gemfile do
-  source 'https://rubygems.org'
-  gem 'mu-auth-sudo', '~> 0.4.0'
-  gem 'rdf-vocab', '~> 3.3'
-  gem 'tty-prompt'
-end
-print "DONE"
 ENV['LOG_SPARQL_ALL']='false'
 ENV['MU_SPARQL_ENDPOINT']='http://virtuoso:8890/sparql'
 ENV['MU_SPARQL_TIMEOUT']='180'
@@ -38,46 +31,12 @@ PREFIX bif:     <http://www.openlinksw.com/schemas/bif#>
 PREFIX skos:    <http://www.w3.org/2004/02/skos/core#>
 SELECT DISTINCT ?org ?name ?classification WHERE {
     ?org a besluit:Bestuurseenheid;
-         besluit:classificatie/skos:prefLabel ?classification; 
+         besluit:classificatie/skos:prefLabel ?classification;
             skos:prefLabel ?name.
     ?name bif:contains #{sparql_escape_string(name_search)}
 }
 EOF
   Mu::AuthSudo.query(query)
-end
-
-prompt = TTY::Prompt.new
-prompt.say("\n\n")
-prompt.say("Welcome to the \"someone else fucked up and you get to clean it up script!\"")
-name = prompt.ask("Name of the admin unit to search:")
-options = search_organization(name).map do |binding|
-  {name: "#{binding[:classification]} #{binding[:name]} (#{binding[:org]})", value: binding[:org]}
-end
-
-if options.size > 0
-  org_uri = prompt.select("Please select the matching admin unit", options)
-else
-  abort("No admin unit found for '#{name}'")
-end
-
-todo = prompt.select("What do you wan to do") do |menu|
-  menu.choice name: "Unpublish a meeting", value: :meeting
-  menu.choice name: "Hide everything for an admin unit", value: :quarantine_admin
-end
-
-def existing_quarantine_graph(org_uri)
-  query = <<~EOF
-PREFIX besluit: <http://data.vlaanderen.be/ns/besluit#>
-PREFIX bif:     <http://www.openlinksw.com/schemas/bif#>
-PREFIX skos:    <http://www.w3.org/2004/02/skos/core#>
-SELECT DISTINCT ?graph WHERE {
-  GRAPH ?graph { ?graph a <http://lblod.data.gift/ns/QuarantineGraph>; prov:wasDerivedFrom #{sparql_escape_uri(org_uri)}. }
-}
-EOF
-  result = Mu::AuthSudo.query(query)
-  if result.length > 0
-    result[0][:graph]
-  end
 end
 
 def create_quarantine_graph(org_uri)
@@ -121,8 +80,23 @@ EOF
   Mu::AuthSudo.update(query)
 end
 
-def quarantine_org(prompt, org_uri)
-  prompt.say("This option will move all meeting data related to #{org_uri} to a separate graph and add some metadata to the main graph")
+def existing_quarantine_graph(org_uri)
+  query = <<~EOF
+PREFIX besluit: <http://data.vlaanderen.be/ns/besluit#>
+PREFIX bif:     <http://www.openlinksw.com/schemas/bif#>
+PREFIX skos:    <http://www.w3.org/2004/02/skos/core#>
+SELECT DISTINCT ?graph WHERE {
+  GRAPH ?graph { ?graph a <http://lblod.data.gift/ns/QuarantineGraph>; prov:wasDerivedFrom #{sparql_escape_uri(org_uri)}. }
+}
+EOF
+  result = Mu::AuthSudo.query(query)
+  if result.length > 0
+    result[0][:graph]
+  end
+end
+
+
+def ensure_quarantine_graph(prompt, org_uri)
   graph = existing_quarantine_graph(org_uri)
   if graph
     prompt.say("Reusing existing quarantine graph #{graph}")
@@ -130,17 +104,129 @@ def quarantine_org(prompt, org_uri)
     graph = create_quarantine_graph(org_uri)
     prompt.say("Created new quarantine graph #{graph}")
   end
+  graph
+end
+
+def quarantine_org(prompt, org_uri)
+  prompt.say("This option will move all meeting data related to #{org_uri} to a separate graph and add some metadata to the main graph")
+  graph = ensure_quarantine_graph(prompt, org_uri)
   meetings = get_meeting_uris_for_org(org_uri)
   prompt.say("Found #{meetings.size} meetings to quarantine")
   meetings.each do |meeting|
     move_meeting_to_quarantine(meeting, graph)
   end
   prompt.say("All meetings moved to quarantine")
+  files = get_file_uris_for_org(org_uri)
+  prompt.say("Found #{files.size} files to quarantine")
+  files.each do |file|
+    move_file_to_quarantine(file, graph)
+  end
+  prompt.say("All files moved to quarantine")
+end
+
+def get_file_uris_for_org(org_uri)
+  query = <<~EOF
+SELECT distinct ?file WHERE {
+  GRAPH <http://mu.semte.ch/graphs/public> {
+   ?resource <http://mu.semte.ch/vocabularies/ext/hasAttachments> ?attachment.
+  }
+  GRAPH ?g {
+    ?attachment <http://mu.semte.ch/vocabularies/ext/hasFile> ?file.
+  }
+  GRAPH <http://mu.semte.ch/graphs/public> {
+    ?file a ?type.
+  }
+  GRAPH ?h {
+   ?meeting a <http://data.vlaanderen.be/ns/besluit#Zitting>.
+   ?meeting prov:wasDerivedFrom ?resource.
+   ?meeting <http://data.vlaanderen.be/ns/besluit#isGehoudenDoor>/<http://data.vlaanderen.be/ns/mandaat#isTijdspecialisatieVan>/<http://data.vlaanderen.be/ns/besluit#bestuurt> ?org.
+  }
+}
+EOF
+  Mu::AuthSudo.query(query).map { |b| b[:file] }
+end
+
+def move_file_to_quarantine(file_uri, quarantine_graph)
+  query = <<~EOF
+  DELETE {
+    GRAPH <http://mu.semte.ch/graphs/public> {
+      #{sparql_escape_uri(file_uri)} ?p ?o.
+      ?fileOnDisk <http://www.semanticdesktop.org/ontologies/2007/01/19/nie#dataSource> #{sparql_escape_uri(file_uri)}.
+      ?fileOnDisk ?p ?o.
+  }}
+  INSERT {
+   GRAPH #{sparql_escape_uri(quarantine_graph)} {
+      #{sparql_escape_uri(file_uri)} ?p ?o.
+      ?fileOnDisk <http://www.semanticdesktop.org/ontologies/2007/01/19/nie#dataSource> #{sparql_escape_uri(file_uri)}.
+      ?fileOnDisk ?p ?o.
+}
+} WHERE { GRAPH <http://mu.semte.ch/graphs/public> {
+      #{sparql_escape_uri(file_uri)} ?p ?o.
+      ?fileOnDisk <http://www.semanticdesktop.org/ontologies/2007/01/19/nie#dataSource> #{sparql_escape_uri(file_uri)}.
+      ?fileOnDisk ?p ?o.
+}};
+EOF
+  Mu::AuthSudo.update(query)
+end
+
+def find_file(file_id, org_uri)
+  # note query is weird because ext:hasFile link is currently not in the correct graph
+  # we also take into account that the meeting etc may already be moved to a quarantine graph
+    query = <<~EOF
+PREFIX prov: <http://www.w3.org/ns/prov#>
+PREFIX mu:   <http://mu.semte.ch/vocabularies/core/>
+SELECT DISTINCT ?file ?name WHERE {
+  GRAPH <http://mu.semte.ch/graphs/public> {
+?file mu:uuid #{sparql_escape_string(file_id.strip)};
+<http://www.semanticdesktop.org/ontologies/2007/03/22/nfo#fileName> ?name.
+?resource <http://mu.semte.ch/vocabularies/ext/hasAttachments> ?attachment.
+}
+  GRAPH ?g {
+?attachment <http://mu.semte.ch/vocabularies/ext/hasFile> ?file.
+}
+  GRAPH ?h {
+ ?meeting a <http://data.vlaanderen.be/ns/besluit#Zitting>.
+  ?meeting prov:wasDerivedFrom ?resource.
+?meeting <http://data.vlaanderen.be/ns/besluit#isGehoudenDoor>/<http://data.vlaanderen.be/ns/mandaat#isTijdspecialisatieVan>/<http://data.vlaanderen.be/ns/besluit#bestuurt> #{sparql_escape_uri(org_uri)}.}
+}
+EOF
+    result = Mu::AuthSudo.query(query)
+    if result.length > 0
+      return result[0]
+    end
+end
+
+prompt = TTY::Prompt.new
+prompt.say("\n\n")
+prompt.say("Welcome to the \"someone else fucked up and you get to clean it up script!\"")
+name = prompt.ask("Name of the admin unit to search:")
+options = search_organization(name).map do |binding|
+  {name: "#{binding[:classification]} #{binding[:name]} (#{binding[:org]})", value: binding[:org]}
+end
+
+if options.size > 0
+  org_uri = prompt.select("Please select the matching admin unit", options)
+else
+  abort("No admin unit found for '#{name}'")
+end
+
+
+todo = prompt.select("What do you wan to do") do |menu|
+  menu.choice name: "remove an attachment", value: :attachment
+  menu.choice name: "Hide everything for an admin unit", value: :quarantine_admin
 end
 
 case todo
 when :quarantine_admin
   quarantine_org(prompt, org_uri)
+when :attachment
+  file_id = prompt.ask("please provide the file id (can be found in the public facing url):")
+  file = find_file(file_id, org_uri)
+  if prompt.yes?("Found file with name #{file[:name]}, move file to quarantine?")
+    graph = ensure_quarantine_graph(prompt, org_uri)
+    move_file_to_quarantine(file[:file], graph)
+    prompt.say("File #{file[:file]} metadata has been moved to quarantine graphs")
+  end
 else
   prompt.say("the selected option is not supported yet")
 
