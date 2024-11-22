@@ -1,5 +1,11 @@
 # app-gn-publicatie
 
+## 1.14.0
+
+### Minor Changes
+
+- [`ff6cd93`](https://github.com/lblod/app-gn-publicatie/commit/ff6cd9308a7e5641cf8f019c5930dd53d3b65460) Thanks [@piemonkey](https://github.com/piemonkey)! - Add migrations to create new bestuursorgan entities to support the newly elected governments
+
 ## 1.13.2
 
 ### Patch Changes
