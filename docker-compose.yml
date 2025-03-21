@@ -111,6 +111,9 @@ services:
     volumes:
       - ./config/delta:/config
     restart: always
+    logging: *default-logging
+    labels:
+      - "logging=true"
   published-resource-consumer:
     image: lblod/gelinkt-notuleren-consumer:0.2.2
     environment:
@@ -126,22 +129,34 @@ services:
     restart: always
     links:
       - database:database
+    logging: *default-logging
+    labels:
+      - "logging=true"
   file:
     image: semtech/mu-file-service:3.1.0
     restart: always
     links:
       - database:database
+    logging: *default-logging
+    labels:
+      - "logging=true"
   sparql-cache:
     image: redpencil/varnish-post:1.0.0
     environment:
       BACKEND_HOST: database
     restart: always
+    logging: *default-logging
+    labels:
+      - "logging=true"
   cooluri:
     image: nvdk/cool-uris:1.0.0
     restart: always
     environment:
       SPARQL_ENDPOINT: "http://virtuoso:8890/sparql"
       PORT: 80
+    logging: *default-logging
+    labels:
+      - "logging=true"
   project-scripts:
     image: semtech/simple-script-store:1.0.0
     volumes:
