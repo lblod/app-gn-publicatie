@@ -1,5 +1,13 @@
 # app-gn-publicatie
 
+## 1.14.1
+
+### Patch Changes
+
+- [#41](https://github.com/lblod/app-gn-publicatie/pull/41) [`297e3c5`](https://github.com/lblod/app-gn-publicatie/commit/297e3c5f33c74d7b7414ca01f979e4c4eca5a888) Thanks [@lagartoverde](https://github.com/lagartoverde)! - Add missing logging keys to docker-compose.yml
+
+- [`6b666ea`](https://github.com/lblod/app-gn-publicatie/commit/6b666ea9621a44fdc5a3580f8db1f1f2e9ea1910) Thanks [@elpoelma](https://github.com/elpoelma)! - Update frontend to version [1.6.1](https://github.com/lblod/frontend-gelinkt-notuleren-publicatie/releases/tag/v1.6.1)
+
 ## 1.14.0
 
 ### Minor Changes
