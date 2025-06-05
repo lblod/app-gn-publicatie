@@ -1,0 +1,53 @@
+services:
+  # # Add identifier to shared network that allows another service, e.g. a harvester, to make
+  # # requests to the publisher
+  # # Tell publicatie that it should allow fastboot for the requests coming from the harvester
+  # identifier:
+  #   networks:
+  #     default:
+  #     shared-gn-harvest:
+  #       aliases:
+  #         - "identifier-gn-publicatie"
+  # publicatie:
+  #   environment:
+  #     EMBER_ADDITIONAL_FASTBOOT_HOST: "identifier-gn-publicatie"
+  #   links:
+  #     - identifier:backend
+
+  # # enable the following for linking the consumer to a local stack
+  # # assumes the app-gn stack is running locally on your host
+  # # and you've renamed the identifier to identifier-gelinkt-notuleren
+  # # Requires network config here and in the GN app
+  # published-resource-consumer:
+  #   environment:
+  #     SERVICE_NAME: 'published-resource-consumer'
+  #     SYNC_BASE_URL: 'http://identifier-gelinkt-notuleren'
+  #     INGEST_INTERVAL: 5000
+  #   networks:
+  #     - default
+  #     - shared-gn-pub
+  #   volumes:
+  #     - ./config/consumer/:/config/
+
+  # Connect app-gn's files as a volume so they're accessible
+  besluit-publicatie:
+    volumes:
+      - ../app-gelinkt-notuleren/data/files/:/share/
+  file:
+    volumes:
+      - ../app-gelinkt-notuleren/data/files/:/share/
+
+  # Allow access to sparql for web UIs such as yasgui
+  virtuoso:
+    environment:
+      ENABLE_CORS: true
+
+# networks:
+#   # Connect to a network shared by local GN so that we can consume from it
+#   shared-gn-pub:
+#     name: shared-gn-pub
+#     external: true
+
+#   # Create a shared network that a harvester can connect to, to scrape published documents
+#   shared-gn-harvest:
+#     name: shared-gn-harvest
