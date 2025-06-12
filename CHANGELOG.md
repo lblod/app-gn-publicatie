@@ -1,5 +1,15 @@
 # app-gn-publicatie
 
+## 1.15.0
+
+### Minor Changes
+
+- [`1d32490`](https://github.com/lblod/app-gn-publicatie/commit/1d32490752aaae46a40f6cf2f095d1df9a0b19ee) Thanks [@abeforgit](https://github.com/abeforgit)! - bump frontend to [v1.6.3](https://github.com/lblod/frontend-gelinkt-notuleren-publicatie/releases/tag/v1.6.3)
+
+### Patch Changes
+
+- [#43](https://github.com/lblod/app-gn-publicatie/pull/43) [`13b8cd9`](https://github.com/lblod/app-gn-publicatie/commit/13b8cd96860c78970caa42b92053ae15196f33f5) Thanks [@piemonkey](https://github.com/piemonkey)! - Add example docker overrides to aid local development
+
 ## 1.14.1
 
 ### Patch Changes
