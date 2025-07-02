@@ -1,5 +1,11 @@
 # app-gn-publicatie
 
+## 1.15.2
+
+### Patch Changes
+
+- [`678e543`](https://github.com/lblod/app-gn-publicatie/commit/678e5431788dbffd4a07701284f9c5d6ea8e16aa) Thanks [@piemonkey](https://github.com/piemonkey)! - bump frontend to [v1.6.6](https://github.com/lblod/frontend-gelinkt-notuleren-publicatie/releases/tag/v1.6.6)
+
 ## 1.15.1
 
 ### Patch Changes
