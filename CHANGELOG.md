@@ -1,5 +1,11 @@
 # app-gn-publicatie
 
+## 1.15.3
+
+### Patch Changes
+
+- [`1831043`](https://github.com/lblod/app-gn-publicatie/commit/1831043cb4e513d7ea088e1bb1fb42519ad8c949) Thanks [@lagartoverde](https://github.com/lagartoverde)! - Update besluit-publicatie-melding-service to 0.6.2
+
 ## 1.15.2
 
 ### Patch Changes
