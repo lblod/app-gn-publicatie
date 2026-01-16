@@ -1,0 +1,3 @@
+catalog:
+  '@lblod/mu-auth-sudo': ^1.0.0-beta.4
+  prettier: ^3.8.0

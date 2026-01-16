@@ -16,6 +16,23 @@
       "mounts": {
         "app": "/project/"
       }
+    },
+
+    {
+      "documentation": {
+        "command": "unpublishjs",
+        "description": "unpublish stuff",
+        "arguments": []
+      },
+      "environment": {
+        "image": "node:lts-alpine3.23",
+        "interactive": true,
+        "script": "unpublishjs/run.sh",
+        "join_networks": true
+      },
+      "mounts": {
+        "app": "/project/"
+      }
     }
   ]
 }
