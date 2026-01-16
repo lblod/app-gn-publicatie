@@ -7,7 +7,7 @@ x-logging: &default-logging
     max-file: "3"
 services:
   publicatie:
-    image: lblod/frontend-gelinkt-notuleren-publicatie:1.6.4
+    image: lblod/frontend-gelinkt-notuleren-publicatie:1.6.6
     mem_limit: 4g
     links:
       - identifier:backend
@@ -83,7 +83,7 @@ services:
     labels:
       - "logging=true"
   publicatie-melding:
-    image: lblod/besluit-publicatie-melding-service:0.6.1
+    image: lblod/besluit-publicatie-melding-service:0.6.3
     restart: always
     logging: *default-logging
     labels:

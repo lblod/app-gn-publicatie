@@ -1,5 +1,23 @@
 # app-gn-publicatie
 
+## 1.15.4
+
+### Patch Changes
+
+- [`3bff7e0`](https://github.com/lblod/app-gn-publicatie/commit/3bff7e01d886576b48e753be2f0d6024376b65f1) Thanks [@lagartoverde](https://github.com/lagartoverde)! - Update besluit-publicatie-melding-service to 0.6.3
+
+## 1.15.3
+
+### Patch Changes
+
+- [`1831043`](https://github.com/lblod/app-gn-publicatie/commit/1831043cb4e513d7ea088e1bb1fb42519ad8c949) Thanks [@lagartoverde](https://github.com/lagartoverde)! - Update besluit-publicatie-melding-service to 0.6.2
+
+## 1.15.2
+
+### Patch Changes
+
+- [`678e543`](https://github.com/lblod/app-gn-publicatie/commit/678e5431788dbffd4a07701284f9c5d6ea8e16aa) Thanks [@piemonkey](https://github.com/piemonkey)! - bump frontend to [v1.6.6](https://github.com/lblod/frontend-gelinkt-notuleren-publicatie/releases/tag/v1.6.6)
+
 ## 1.15.1
 
 ### Patch Changes
