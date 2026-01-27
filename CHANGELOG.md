@@ -1,5 +1,11 @@
 # app-gn-publicatie
 
+## 1.15.5
+
+### Patch Changes
+
+- [`54924fd`](https://github.com/lblod/app-gn-publicatie/commit/54924fd1b0f1e0fc91d2be16fbab5ff476973f13) Thanks [@lagartoverde](https://github.com/lagartoverde)! - bump publish service to [v0.13.1](https://github.com/lblod/besluit-publicatie-publish-service/releases/tag/v0.13.1)
+
 ## 1.15.4
 
 ### Patch Changes
