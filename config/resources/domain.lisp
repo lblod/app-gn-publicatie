@@ -122,7 +122,10 @@
   :has-one `((behandeling-van-agendapunt :via ,(s-prefix "besluit:gebeurtNa")
                                          :as "vorige-behandeling-van-agendapunt")
              (agendapunt :via ,(s-prefix "dct:subject")
-                              :as "onderwerp"))
+                              :as "onderwerp")
+            (uittreksel :via ,(s-prefix "ext:uittrekselBvap")
+                                         :inverse t
+                                         :as "uittreksel"))
   :resource-base (s-url "http://data.lblod.info/id/behandelingen-van-agendapunt")
   :features '(include-uri)
   :on-path "behandelingen-van-agendapunten"
@@ -152,13 +155,15 @@
                 (:taal :url ,(s-prefix "eli:language"))
                 (:parts :uri-set ,(s-prefix "eli:related_to"))
                 (:titel :string ,(s-prefix "eli:title"))
+                (:type :uri-set ,(s-prefix "rdf:type"))
                 (:score :float ,(s-prefix "nao:score")))
   :has-one `((behandeling-van-agendapunt :via ,(s-prefix "prov:generated")
                                          :inverse t
                                          :as "volgend-uit-behandeling-van-agendapunt")
              (besluitenlijst :via ,(s-prefix "ext:besluitenlijstBesluit")
                              :inverse t
-                             :as "besluitenlijst"))
+                             :as "besluitenlijst")
+              (besluit :via ,(s-prefix "ext:linkedDecision") :as "linked-decision"))
   :has-many `((published-resource :via ,(s-prefix "prov:wasDerivedFrom")
                                   :as "publications"))
   :resource-base (s-url "http://data.lblod.info/id/besluiten/")
