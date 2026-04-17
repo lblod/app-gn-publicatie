@@ -1,5 +1,15 @@
 # app-gn-publicatie
 
+## 1.16.0
+
+### Minor Changes
+
+- [`6eb182f`](https://github.com/lblod/app-gn-publicatie/pull/44) Thanks [@lagartoverde](https://github.com/lagartoverde)! -Add properties to besluit and bvap to support new reglementen view
+
+### Patch Changes
+
+- [`ae2135c`](https://github.com/lblod/app-gn-publicatie/commit/ae2135c5449dfea8f92a5b0e3da7cb679defa12bf476973f13) Thanks [@lagartoverde](https://github.com/lagartoverde)! - Bump frontend-gelinkt-notuleren-publicatie to [1.7.0](https://github.com/lblod/frontend-gelinkt-notuleren-publicatie/releases/tag/v1.7.0) and besluit-publicatie-publish-service to [0.14.0](https://github.com/lblod/besluit-publicatie-publish-service/releases/tag/v0.14.0)
+
 ## 1.15.5
 
 ### Patch Changes
