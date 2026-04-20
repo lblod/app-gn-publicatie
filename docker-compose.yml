@@ -28,7 +28,8 @@ services:
     labels:
       - "logging=true"
     environment:
-      DEFAULT_MU_AUTH_ALLOWED_GROUPS_HEADER: "[{\"variables\":[],\"name\":\"public\"}]"
+      # It is INCREDIBLY important that the "clean" group is part of this config, DO NOT ADJUST unless you know EXACTLY what you're doing
+      DEFAULT_MU_AUTH_ALLOWED_GROUPS_HEADER: "[{\"variables\":[],\"name\":\"clean\"}, {\"variables\":[],\"name\":\"public\"}]"
       DEFAULT_ACCESS_CONTROL_ALLOW_ORIGIN_HEADER: '*'
   database:
     image: semtech/mu-authorization:0.6.0-beta.6
