@@ -1,5 +1,11 @@
 # app-gn-publicatie
 
+## 1.16.1
+
+### Patch Changes
+
+- [`8b02b3c`](https://github.com/lblod/app-gn-publicatie/commit/8b02b3c268ed9b1d62ba69a55e1d9a4807e7375a) Thanks [@abeforgit](https://github.com/abeforgit)! - Add clean group to default mu auth allowed groups header
+
 ## 1.16.0
 
 ### Minor Changes
