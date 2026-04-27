@@ -163,7 +163,7 @@
              (besluitenlijst :via ,(s-prefix "ext:besluitenlijstBesluit")
                              :inverse t
                              :as "besluitenlijst")
-              (besluit :via ,(s-prefix "ext:linkedDecision") :as "linked-decision"))
+              (besluit :via ,(s-prefix "eli:consolidates") :as "linked-decision"))
   :has-many `((published-resource :via ,(s-prefix "prov:wasDerivedFrom")
                                   :as "publications"))
   :resource-base (s-url "http://data.lblod.info/id/besluiten/")
