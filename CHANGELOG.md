@@ -24,6 +24,18 @@
 
 - [`ae2135c`](https://github.com/lblod/app-gn-publicatie/commit/ae2135c5449dfea8f92a5b0e3da7cb679defa12bf476973f13) Thanks [@lagartoverde](https://github.com/lagartoverde)! - Bump frontend-gelinkt-notuleren-publicatie to [1.7.0](https://github.com/lblod/frontend-gelinkt-notuleren-publicatie/releases/tag/v1.7.0) and besluit-publicatie-publish-service to [0.14.0](https://github.com/lblod/besluit-publicatie-publish-service/releases/tag/v0.14.0)
 
+## 1.15.7
+
+### Patch Changes
+
+- [`97afc6e`](https://github.com/lblod/app-gn-publicatie/commit/97afc6e995e51ab661e6b21dc2482828640e098e) Thanks [@abeforgit](https://github.com/abeforgit)! - bump virtuoso to 1.2.2
+
+## 1.15.6
+
+### Patch Changes
+
+- [`8b02b3c`](https://github.com/lblod/app-gn-publicatie/commit/8b02b3c268ed9b1d62ba69a55e1d9a4807e7375a) Thanks [@abeforgit](https://github.com/abeforgit)! - Add clean group to default mu auth allowed groups header
+
 ## 1.15.5
 
 ### Patch Changes
