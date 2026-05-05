@@ -1,5 +1,11 @@
 # app-gn-publicatie
 
+## 1.15.7
+
+### Patch Changes
+
+- [`97afc6e`](https://github.com/lblod/app-gn-publicatie/commit/97afc6e995e51ab661e6b21dc2482828640e098e) Thanks [@abeforgit](https://github.com/abeforgit)! - bump virtuoso to 1.2.2
+
 ## 1.15.6
 
 ### Patch Changes
