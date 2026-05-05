@@ -1,5 +1,13 @@
 # app-gn-publicatie
 
+## 1.16.2
+
+### Patch Changes
+
+- [#45](https://github.com/lblod/app-gn-publicatie/pull/45) [`cc23033`](https://github.com/lblod/app-gn-publicatie/commit/cc23033523e016fc4deaa8e812309bda8c160f61) Thanks [@lagartoverde](https://github.com/lagartoverde)! - Change linked decision predicate to eli:consolidates
+
+- [`63ccdea`](https://github.com/lblod/app-gn-publicatie/commit/63ccdead9d3654400d269cea9dd03380151cecb7) Thanks [@abeforgit](https://github.com/abeforgit)! - bump virtuoso to 1.2.2
+
 ## 1.16.1
 
 ### Patch Changes
