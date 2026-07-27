@@ -1,5 +1,11 @@
 # app-gn-publicatie
 
+## 1.16.3
+
+### Patch Changes
+
+- [`54f4246`](https://github.com/lblod/app-gn-publicatie/commit/54f424687112ae143a9b23955bac66954184d21f) Thanks [@abeforgit](https://github.com/abeforgit)! - update frontend to [v1.7.2](https://github.com/lblod/frontend-gelinkt-notuleren-publicatie/releases/tag/v1.7.2)
+
 ## 1.16.2
 
 ### Patch Changes
