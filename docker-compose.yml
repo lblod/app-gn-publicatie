@@ -32,11 +32,10 @@ services:
       DEFAULT_MU_AUTH_ALLOWED_GROUPS_HEADER: "[{\"variables\":[],\"name\":\"clean\"}, {\"variables\":[],\"name\":\"public\"}]"
       DEFAULT_ACCESS_CONTROL_ALLOW_ORIGIN_HEADER: '*'
   database:
-    image: semtech/mu-authorization:0.6.0-beta.6
-    environment:
-      MU_SPARQL_ENDPOINT: "http://virtuoso:8890/sparql"
+    image: semtech/sparql-parser:0.0.15
     volumes:
       - ./config/authorization:/config
+      - ./data/mu-auth:/data
     restart: always
     logging: *default-logging
     labels:
