@@ -1,5 +1,13 @@
 # app-gn-publicatie
 
+## 1.17.0
+
+### Minor Changes
+
+- [#47](https://github.com/lblod/app-gn-publicatie/pull/47) [`0594ca7`](https://github.com/lblod/app-gn-publicatie/commit/0594ca78a4cb045d484a149f62fc9b84be04e834) Thanks [@kobemertens](https://github.com/kobemertens)! - Move to sparql-parser
+
+- [`94e243e`](https://github.com/lblod/app-gn-publicatie/commit/94e243eb42ca993aa811464833124f8b8c2c83d7) Thanks [@elpoelma](https://github.com/elpoelma)! - Update frontend to version [1.8.0](https://github.com/lblod/frontend-gelinkt-notuleren-publicatie/releases/tag/v1.8.0)
+
 ## 1.16.3
 
 ### Patch Changes
