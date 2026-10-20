@@ -122,6 +122,8 @@ services:
     restart: always
     volumes:
       - ./config/consumer/:/config/
+    labels:
+      - "logging=true"
   taskmetrics:
     image: lblod/task-metrics-service:1.0.0
     restart: always
