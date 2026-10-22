@@ -73,7 +73,7 @@ services:
     labels:
       - "logging=true"
   besluit-publicatie:
-    image: lblod/besluit-publicatie-publish-service:0.14.0
+    image: lblod/besluit-publicatie-publish-service:0.14.1
     links:
       - database:database
     restart: always
