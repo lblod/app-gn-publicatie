@@ -1,5 +1,12 @@
 # app-gn-publicatie
 
+## 1.17.1
+
+### Patch Changes
+
+- [`4baa14c`](https://github.com/lblod/app-gn-publicatie/commit/4baa14cc651310bd2f30cba2c7395821d057789a) Thanks [@kobemertens](https://github.com/kobemertens)! - Bump besluit-publicatie-publish-service to v0.14.1
+  This release fixes a bug in `persistExtractedData` that caused it to not work with sparql-parser
+
 ## 1.17.0
 
 ### Minor Changes
