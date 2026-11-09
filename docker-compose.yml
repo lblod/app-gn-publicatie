@@ -14,7 +14,7 @@ services:
     labels:
       - "logging=true"
   dispatcher:
-    image: semtech/mu-dispatcher:2.0.0
+    image: semtech/mu-dispatcher:2.1.1
     volumes:
       - ./config/dispatcher:/config
     restart: always
@@ -22,7 +22,7 @@ services:
     labels:
       - "logging=true"
   identifier:
-    image: semtech/mu-identifier:1.10.1
+    image: semtech/mu-identifier:1.11.0
     restart: always
     logging: *default-logging
     labels:
@@ -133,7 +133,7 @@ services:
     labels:
       - "logging=true"
   file:
-    image: semtech/mu-file-service:3.1.0
+    image: semtech/mu-file-service:3.5.2
     restart: always
     links:
       - database:database
